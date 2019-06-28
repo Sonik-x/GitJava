@@ -5,51 +5,37 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class Main
-{
+public class Main {
     private static String staffFile = "data/staff.txt";
     private static String dateFormat = "dd.MM.yyyy";
+    private static final int YEAR_2017 = 117;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         ArrayList<Employee> staff = loadStaffFromFile();
 
-        Collections.sort(staff, ((o1, o2) -> {
-            var res = o1.getSalary().compareTo(o2.getSalary());
-            if(res == 0){
-                return o1.getName().compareTo(o2.getName());
-            }
-            return res;
-        }));
-
-        for (Employee e : staff){
-            System.out.println(e);
-        }
+        staff.stream().filter(e -> e.getWorkStart().getYear() == YEAR_2017)
+                .max(Comparator.comparing(Employee::getSalary)).ifPresent(e -> System.out.println(e.getSalary()));
 
 
     }
 
-    private static ArrayList<Employee> loadStaffFromFile()
-    {
+    private static ArrayList<Employee> loadStaffFromFile() {
         ArrayList<Employee> staff = new ArrayList<>();
-        try
-        {
+        try {
             List<String> lines = Files.readAllLines(Paths.get(staffFile));
-            for(String line : lines)
-            {
+            for (String line : lines) {
                 String[] fragments = line.split("\t");
-                if(fragments.length != 3) {
+                if (fragments.length != 3) {
                     System.out.println("Wrong line: " + line);
                     continue;
                 }
                 staff.add(new Employee(
-                    fragments[0],
-                    Integer.parseInt(fragments[1]),
-                    (new SimpleDateFormat(dateFormat)).parse(fragments[2])
+                        fragments[0],
+                        Integer.parseInt(fragments[1]),
+                        (new SimpleDateFormat(dateFormat)).parse(fragments[2])
                 ));
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return staff;
