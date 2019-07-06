@@ -9,6 +9,7 @@ public class Station implements Comparable<Station>
     {
         this.name = name;
         this.line = line;
+        line.addStation(this);      // имхо, логичнее вот тут это делать, во избежание...
     }
 
     public Line getLine()

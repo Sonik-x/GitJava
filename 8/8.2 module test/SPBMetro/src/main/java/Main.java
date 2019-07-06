@@ -37,7 +37,7 @@ public class Main
         }
     }
 
-    static RouteCalculator getRouteCalculator()
+    private static RouteCalculator getRouteCalculator()
     {
         createStationIndex();
         return new RouteCalculator(stationIndex);
@@ -134,7 +134,6 @@ public class Main
             {
                 Station station = new Station((String) stationObject, line);
                 stationIndex.addStation(station);
-                line.addStation(station);
             });
         });
     }
