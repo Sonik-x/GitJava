@@ -92,13 +92,13 @@ public class RouteCalculator
             return null;                                            // но с одной пересадкой на них не попасть (зелёная-фиолетовая)
         }
 
-        ArrayList<Station> route = new ArrayList<>();                  // ... нулл мы тогда не возвращаем, а значит попытки найти маршрут с двумя пересадками вообще не будет
+        ArrayList<Station> route = new ArrayList<>();
 
         List<Station> fromLineStations = from.getLine().getStations();
         List<Station> toLineStations = to.getLine().getStations();
         for(Station srcStation : fromLineStations)
         {
-            for(Station dstStation : toLineStations)       //вроде не очень эффективно, можно было соединение линий проверять и отдавать пересадочные станции, а не перебирать каждую...
+            for(Station dstStation : toLineStations)
             {
                 if(isConnected(srcStation, dstStation))
                 {
@@ -112,6 +112,9 @@ public class RouteCalculator
                     }
                 }
             }
+        }
+        if(route.size() == 0){       // пофиксено
+            return null;
         }
         return route;
     }
