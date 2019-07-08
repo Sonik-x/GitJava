@@ -10,13 +10,11 @@ import java.util.List;
 public class TestRouteCalculator extends TestCase {
 
 
-    // заходит тестировщик в бар...
 
 
     RouteCalculator routeCalculator = null;
     Line green = null;
     Station green1 = null;
-    Station green2 = null;
 
     Line blue = null;
     Station blue1 = null;
@@ -29,22 +27,19 @@ public class TestRouteCalculator extends TestCase {
     Station red3 = null;
     Station red4 = null;
 
-    Line white = null;
-    Station white1 = null;
-    Station white2 = null;
-    Station white3 = null;
-    Station white4 = null;
-    Station white5 = null;
+    /*
+             g1
+             b2
+           /    \
+          b1     b3
+         r1-r2-r3-r4
 
-    Line bubble = null;
-    Station bubble1 = null;
-    Station bubble2 = null;
+     */
 
     @Override
     protected void setUp() throws Exception {
         green = new Line(1, "green");
         green1 = new Station("green 1", green);
-        green2 = new Station("green 2", green);
 
         blue = new Line(2, "blue");
         blue1 = new Station("blue 1", blue);
@@ -57,43 +52,25 @@ public class TestRouteCalculator extends TestCase {
         red3 = new Station("red 3", red);
         red4 = new Station("red 4", red);
 
-        white = new Line(4, "white");
-        white1 = new Station("white 1", white);
-        white2 = new Station("white 2", white);
-        white3 = new Station("white 3", white);
-        white4 = new Station("white 4", white);
-        white5 = new Station("white 5", white);
-
-        bubble = new Line(5, "bubble");
-        bubble1 = new Station("bubble 1", bubble);
-        bubble2 = new Station("surprise!", bubble);
 
         List<Station> connection1 = new ArrayList<>();
-        connection1.add(green2);
-        connection1.add(red2);
-        connection1.add(blue1);
+        connection1.add(green1);
+        connection1.add(blue2);
 
         List<Station> connection2 = new ArrayList<>();
-        connection2.add(blue3);
-        connection2.add(white2);
+        connection2.add(blue1);
+        connection2.add(red1);
 
         List<Station> connection3 = new ArrayList<>();
         connection3.add(red4);
-        connection3.add(white4);
-
-        List<Station> connectionBubble = new ArrayList<>();
-        connectionBubble.add(white5);
-        connectionBubble.add(bubble1);
+        connection3.add(blue3);
 
 
         StationIndex stationIndex = new StationIndex();
         stationIndex.addLine(green);
         stationIndex.addLine(blue);
         stationIndex.addLine(red);
-        stationIndex.addLine(white);
-        stationIndex.addLine(bubble);
         stationIndex.addStation(green1);
-        stationIndex.addStation(green2);
         stationIndex.addStation(blue1);
         stationIndex.addStation(blue2);
         stationIndex.addStation(blue3);
@@ -101,17 +78,9 @@ public class TestRouteCalculator extends TestCase {
         stationIndex.addStation(red2);
         stationIndex.addStation(red3);
         stationIndex.addStation(red4);
-        stationIndex.addStation(white1);
-        stationIndex.addStation(white2);
-        stationIndex.addStation(white3);
-        stationIndex.addStation(white4);
-        stationIndex.addStation(white5);
-        stationIndex.addStation(bubble1);
-        stationIndex.addStation(bubble2);
         stationIndex.addConnection(connection1);
         stationIndex.addConnection(connection2);
         stationIndex.addConnection(connection3);
-        stationIndex.addConnection(connectionBubble);
 
 
         routeCalculator = new RouteCalculator(stationIndex);
@@ -120,7 +89,7 @@ public class TestRouteCalculator extends TestCase {
     }
 
 
-    public void testGetShortestRoute1() {
+    public void testGetShortestRoute_SameStation() {
         List<Station> expected = new ArrayList<>();
         expected.add(green1);
 
@@ -131,12 +100,25 @@ public class TestRouteCalculator extends TestCase {
     }
 
 
-    public void testGetShortestRoute2() {
+    public void testGetShortestRoute_SameLine() {
         List<Station> expected = new ArrayList<>();
-        expected.add(green1);
-        expected.add(green2);
+        expected.add(red1);
+        expected.add(red2);
+        expected.add(red3);
 
-        List<Station> actual = routeCalculator.getShortestRoute(green1, green2);
+        List<Station> actual = routeCalculator.getShortestRoute(red1, red3);
+
+
+        assertEquals(expected, actual);
+    }
+
+    public void testGetShortestRoute_OneConnection() {  //I AM HERE
+        List<Station> expected = new ArrayList<>();
+        expected.add(red1);
+        expected.add(red2);
+        expected.add(red3);
+
+        List<Station> actual = routeCalculator.getShortestRoute(red1, red3);
 
 
         assertEquals(expected, actual);
@@ -165,7 +147,7 @@ public class TestRouteCalculator extends TestCase {
         double actual = RouteCalculator.calculateDuration(route);
 
 
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     public void testCalculateDuration2() {
@@ -177,7 +159,7 @@ public class TestRouteCalculator extends TestCase {
         double actual = RouteCalculator.calculateDuration(route);
 
 
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     public void testCalculateDuration3() {
@@ -191,7 +173,7 @@ public class TestRouteCalculator extends TestCase {
         double actual = RouteCalculator.calculateDuration(route);
 
 
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     public void testCalculateDuration4() {   // здесь 3 пересадки, но коду всё равно, так и надо
@@ -210,7 +192,7 @@ public class TestRouteCalculator extends TestCase {
         double actual = RouteCalculator.calculateDuration(route);
 
 
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 
@@ -260,7 +242,7 @@ public class TestRouteCalculator extends TestCase {
         double actual = RouteCalculator.calculateDuration(route);
 
 
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
 
