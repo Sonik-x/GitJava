@@ -114,32 +114,46 @@ public class TestRouteCalculator extends TestCase {
 
     public void testGetShortestRoute_OneConnection() {  //I AM HERE
         List<Station> expected = new ArrayList<>();
-        expected.add(red1);
         expected.add(red2);
-        expected.add(red3);
-
-        List<Station> actual = routeCalculator.getShortestRoute(red1, red3);
-
-
-        assertEquals(expected, actual);
-    }
-
-    public void testGetShortestRoute3() {
-        List<Station> expected = new ArrayList<>();
-        expected.add(green1);
-        expected.add(green2);
+        expected.add(red1);
         expected.add(blue1);
         expected.add(blue2);
-        expected.add(blue3);
-        expected.add(white2);
 
-        List<Station> actual = routeCalculator.getShortestRoute(green1, white2);
+        List<Station> actual = routeCalculator.getShortestRoute(red2, blue2);
 
 
         assertEquals(expected, actual);
     }
 
-    public void testCalculateDuration1() {
+    public void testGetShortestRoute_TwoConnections() {
+        List<Station> expected = new ArrayList<>();
+        expected.add(red2);
+        expected.add(red1);
+        expected.add(blue1);
+        expected.add(blue2);
+        expected.add(green1);
+
+        List<Station> actual = routeCalculator.getShortestRoute(red2, green1);
+
+
+        assertEquals(expected, actual);
+    }
+
+    public void testGetShortestRoute_TwoConnectionsOtherSide() {
+        List<Station> expected = new ArrayList<>();
+        expected.add(red3);
+        expected.add(red4);
+        expected.add(blue3);
+        expected.add(blue2);
+        expected.add(green1);
+
+        List<Station> actual = routeCalculator.getShortestRoute(red3, green1);
+
+
+        assertEquals(expected, actual);
+    }
+
+    public void testCalculateDuration_SameStation() {
         double expected = 0;
 
         List<Station> route = new ArrayList<>();
@@ -150,24 +164,24 @@ public class TestRouteCalculator extends TestCase {
         assertEquals(expected, actual);
     }
 
-    public void testCalculateDuration2() {
+    public void testCalculateDuration_OneStation() {
         double expected = 2.5;
 
         List<Station> route = new ArrayList<>();
-        route.add(green1);
-        route.add(green2);
+        route.add(red1);
+        route.add(red2);
         double actual = RouteCalculator.calculateDuration(route);
 
 
         assertEquals(expected, actual);
     }
 
-    public void testCalculateDuration3() {
+    public void testCalculateDuration_OneConnection() {
         double expected = 8.5;
 
         List<Station> route = new ArrayList<>();
-        route.add(green1);
-        route.add(green2);
+        route.add(blue2);
+        route.add(blue1);
         route.add(red2);
         route.add(red1);
         double actual = RouteCalculator.calculateDuration(route);
@@ -176,19 +190,14 @@ public class TestRouteCalculator extends TestCase {
         assertEquals(expected, actual);
     }
 
-    public void testCalculateDuration4() {   // здесь 3 пересадки, но коду всё равно, так и надо
-        double expected = 23;
+    public void testCalculateDuration_TwoConnections() {   // здесь 3 пересадки, но коду всё равно, так и надо
+        double expected = 9.5;
 
         List<Station> route = new ArrayList<>();
         route.add(green1);
-        route.add(green2);
-        route.add(red2);
-        route.add(red3);
-        route.add(red4);
-        route.add(white4);
-        route.add(white5);
-        route.add(bubble1);
-        route.add(bubble2);
+        route.add(blue2);
+        route.add(blue1);
+        route.add(red1);
         double actual = RouteCalculator.calculateDuration(route);
 
 
@@ -196,33 +205,10 @@ public class TestRouteCalculator extends TestCase {
     }
 
 
-    // остальные методы приватные, и их работа проверяется через эти тесты
-
     //====================================================================================================================================================================
 
-    public void testGetShortestRoute4() {   // 3 пересадки!
 
-        // я изучила карты метро и, вроде бы, отсутствие подобной ситуации в реальной жизни обеспечивается инженерами/дизайнерами самого метро, так что не баг
-
-
-        List<Station> expected = new ArrayList<>();
-        expected.add(green1);
-        expected.add(green2);
-        expected.add(red2);
-        expected.add(red3);
-        expected.add(red4);
-        expected.add(white4);
-        expected.add(white5);
-        expected.add(bubble1);
-        expected.add(bubble2);
-
-        List<Station> actual = routeCalculator.getShortestRoute(green1, bubble2);
-
-
-        assertEquals(expected, actual);
-    }
-
-    public void testNotConnected() {
+    public void testGetShortestRoute_NotConnected() {
         Line brandNewLine = new Line(6, "Yammy");
         Station brandNewStation = new Station("Welcome!", brandNewLine);
 
@@ -233,12 +219,12 @@ public class TestRouteCalculator extends TestCase {
         assertEquals(expected, actual);
     }
 
-    public void testFlyDirection() {
+    public void testCalculateDuration_Fly() {
         double expected = 3.5;
 
         List<Station> route = new ArrayList<>();
         route.add(green1);
-        route.add(bubble2);
+        route.add(red1);
         double actual = RouteCalculator.calculateDuration(route);
 
 
